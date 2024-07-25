@@ -19,8 +19,8 @@ def find_files(directory, extensions=None):
     return files  
   
 # 函数用于分析多个文件的内容  
-def analyze_files_with_rules(files, rules, output_file_path, output_link_file_path):  
-    with open(output_file_path, 'w', encoding='utf-8') as output_file,open(output_link_file_path, 'w', encoding='utf-8') as link_output_file:  
+def analyze_files_with_rules(files, rules, output_file_path, output_link_file_path,host_file_path,path_file_path):  
+    with open(output_file_path, 'w', encoding='utf-8') as output_file,open(output_link_file_path, 'w', encoding='utf-8') as link_output_file,open(host_file_path, 'w', encoding='utf-8') as host_output_file,open(path_file_path, 'w', encoding='utf-8') as path_output_file:  
         for file_path in files:  
             try:  
                 with open(file_path, 'r', encoding='utf-8') as f:  
@@ -39,7 +39,8 @@ def analyze_files_with_rules(files, rules, output_file_path, output_link_file_pa
                                 # 检查是否为 "Linkfinder" 规则  
                                 if rule['name'] == "Linkfinder":  
                                     link_matches.append(match.group())  
-                                    # 也可以在这里直接将链接写入链接输出文件，但为了避免重复写入，我们在最后统一写入  
+                                    # 也可以在这里直接将链接写入链接输出文件，但为了避免重复写入，我们在最后统一写入
+
   
                     # 如果没有任何匹配项，则打印无匹配信息  
                     if not matches_for_file:  
@@ -47,9 +48,21 @@ def analyze_files_with_rules(files, rules, output_file_path, output_link_file_pa
   
                     # 将 "Linkfinder" 规则的所有匹配链接写入链接输出文件  
                     if link_matches:  
-                        link_output_file.write(f"Matches for {file_path} using 'Linkfinder' rule:\n")  
+                        #link_output_file.write(f"Matches for {file_path} using 'Linkfinder' rule:\n")  
                         for link in link_matches:  
-                            link_output_file.write(f"- {link}\n")  
+                            # 尝试去除两端的双引号  
+                            clean_link = link.strip('"')  
+                              
+                            # 如果去除双引号后，字符串仍然以单引号开头和结尾，则去除单引号  
+                            if clean_link.startswith("'") and clean_link.endswith("'"):  
+                                clean_link = clean_link[1:-1] 
+                            if clean_link.startswith("http") or clean_link.startswith("https"):  
+                                host_output_file.write(f"{clean_link}\n")  
+                            elif clean_link.startswith("/"):  
+                                path_output_file.write(f"{clean_link}\n")
+
+                            link_output_file.write(f"{clean_link}\n")
+
   
             except Exception as e:  
                 print(f"Error reading file {file_path}: {e}")  
@@ -73,8 +86,10 @@ if __name__ == "__main__":
     yaml_file_path = 'Rules.yml'  # YAML文件路径  
     directory_path = r"C:\Users\tea90\Desktop\sss"  # 要分析的文件夹路径  
     #output_file_path = "output.txt"  # 指定输出文件的路径
-    output_file_path = f"output_{datetime.now().strftime('%H%M%S')}.txt"
-    output_link_file_path = f"link_{datetime.now().strftime('%H%M%S')}.txt"
+    output_file_path = f"output_{datetime.now().strftime('%Y%m%d%H%M%S')}.txt" 
+    output_link_file_path = f"link_{datetime.now().strftime('%Y%m%d%H%M%S')}.txt"
+    output_host_file_path = f"host_{datetime.now().strftime('%Y%m%d%H%M%S')}.txt"
+    output_path_file_path = f"path_{datetime.now().strftime('%Y%m%d%H%M%S')}.txt"
     extensions = ['.js','.html','.java']  # 只想分析的文件扩展名列表，None表示分析所有文件  
   
     # 加载规则  
@@ -97,7 +112,7 @@ if __name__ == "__main__":
         #analyze_text_with_rules(data, rules_data.get('rules', []), output_file_path) 
         # 查找并分析文件  
         files = find_files(directory_path, extensions)  
-        analyze_files_with_rules(files, rules,output_file_path,output_link_file_path) 
+        analyze_files_with_rules(files, rules,output_file_path,output_link_file_path,output_host_file_path,output_path_file_path) 
     except Exception as e:  
         print(f"An error occurred: {e}")  
         sys.exit(1)
