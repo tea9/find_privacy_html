@@ -26,9 +26,11 @@ formatjs.py格式化js和html文件
 
 ```
 python3 rrr.py #检测敏感信息
-运行rrr.py 会生成两个文件 
+运行rrr.py 会生成4个文件 
 out.txt 会把匹配到的敏感信息输出 
 link.txt会把规则Linkfinder匹配到的信息输出
+path.txt api路径信息
+host.txt 网址信息
 
 
 python3 formatjs.py #格式化js
