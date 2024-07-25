@@ -30,4 +30,4 @@ python3 formatjs.py #格式化js
 
 
 规则来自hae  
-感谢群友还有gpt  
+感谢hae还有群友还有gpt  
