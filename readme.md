@@ -18,6 +18,24 @@ link.txt
 - cordova/argscheck
 ```
 
+host.txt
+```
+https://router.vuejs.org/logo.png
+https://pinia.vuejs.org/logo.svg
+https://pinia.vuejs.org
+https://pinia.vuejs.org/logo.svg
+https://pinia.vuejs.org
+```
+
+path.txt
+```
+/card
+/card
+/card/card-detail
+/card/card-apply
+/card/budget-apply
+```
+
 
 npm install -g prettier
 
