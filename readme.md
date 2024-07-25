@@ -27,3 +27,7 @@ formatjs.py格式化js和html文件
 python3 rrr.py #检测敏感信息
 python3 formatjs.py #格式化js
 ```
+
+
+规则来自hae  
+感谢群友还有gpt  
